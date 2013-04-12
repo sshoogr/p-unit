@@ -1,0 +1,27 @@
+
+buildscript {
+  repositories { mavenCentral() }
+  dependencies { classpath 'net.saliman:gradle-cobertura-plugin:1.1.2' }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'idea'
+apply plugin: 'cobertura'
+
+apply from: 'repos.gradle'
+apply from: 'sonar.gradle'
+
+group = 'com.aestasit.puppet'
+version = '0.3-SNAPSHOT'
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+dependencies {
+  compile 'junit:junit:4.+'
+  compile 'ch.qos.logback:logback-classic:1.+'
+  compile 'org.slf4j:slf4j-api:1.7.2'
+  compile 'com.aestasit.ssh:groovy-ssh-dsl:0.8-SNAPSHOT'
+  groovy localGroovy()
+}
