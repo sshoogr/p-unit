@@ -1,23 +1,28 @@
 package com.aestasit.puppet.integration.tests
 
-public class IntegrationError extends RuntimeException {
+/**
+ * Special exception for indicating Puppet errors.
+ *
+ * @author Aestas/IT
+ *
+ */
+class IntegrationError extends RuntimeException {
 
   private static final long serialVersionUID = 1L
 
-  public IntegrationError() {
+  IntegrationError() {
     super()
   }
 
-  public IntegrationError(String message, Throwable cause) {
+  IntegrationError(String message, Throwable cause) {
     super(message, cause)
   }
 
-  public IntegrationError(String message) {
+  IntegrationError(String message) {
     super(message)
   }
 
-  public IntegrationError(Throwable cause) {
+  IntegrationError(Throwable cause) {
     super(cause)
   }
-
 }
