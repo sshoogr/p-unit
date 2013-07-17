@@ -189,7 +189,6 @@ class BasePuppetIntegrationTest {
 		return new TestRule(){
 
 			public Statement apply(Statement arg0, Description arg1){
-				println (">>>> executing ${comm}")
 				BasePuppetIntegrationTest.command(comm)
 				return arg0;
 			}
