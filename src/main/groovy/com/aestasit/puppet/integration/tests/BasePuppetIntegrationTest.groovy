@@ -16,6 +16,10 @@ import com.aestasit.ssh.dsl.CommandOutput
 import com.aestasit.ssh.dsl.SshDslEngine
 import com.aestasit.ssh.log.SysOutLogger
 
+import org.junit.rules.TestRule
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
+
 class BasePuppetIntegrationTest {
 
   def static Random rng = new Random()
@@ -181,4 +185,44 @@ class BasePuppetIntegrationTest {
     return command("rpm -qa | grep $pkg") == 0
   }
 
-}
+	def static TestRule commandRule(final String comm){
+		return new TestRule(){
+
+			public Statement apply(Statement arg0, Description arg1){
+				BasePuppetIntegrationTest.command(comm)
+				return arg0;
+			}
+		}
+	}
+
+	def static TestRule printRule(final String message){
+		return new TestRule(){
+			
+			public Statement apply(Statement arg0, Description arg1){
+				println(message)
+				return arg0;
+			}
+		}
+	}
+
+	def static uploadRule(final String fileName){
+		return new TestRule(){
+			public Statement apply(Statement arg0, Description arg1){
+				def tmpFile = File.createTempFile("upload.", ".tmp")
+				tmpFile.renameTo(fileName)
+				tmpFile.deleteOnExit()
+				tmpFile << Thread.currentThread().getContextClassLoader().getResourceAsStream("applications/${fileName}")
+				session {
+					exec 'mkdir -p /var/oracle/apps'
+					scp {
+						from { localFile tmpFile }
+						into { remoteDir '/var/oracle/apps' }
+					}
+				}
+				tmpFile.delete()
+				return arg0;
+			}
+		}
+		}
+
+	}
