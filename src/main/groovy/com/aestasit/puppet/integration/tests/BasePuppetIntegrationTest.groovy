@@ -188,7 +188,7 @@ class BasePuppetIntegrationTest {
     return new TestRule() {
       public Statement apply(Statement stmt, Description desc) {
         BasePuppetIntegrationTest.command(comm)
-        return stmt;
+        stmt
       }
     }
   }
@@ -197,27 +197,27 @@ class BasePuppetIntegrationTest {
     return new TestRule() {
       public Statement apply(Statement stmt, Description desc) {
         println(message)
-        return stmt;
+        stmt
       }
     }
   }
 
-  def static uploadRule(final String fileName) {
+  def static uploadRule(final String classpathFile, String remoteDir = '/tmp') {
     return new TestRule() {
       public Statement apply(Statement stmt, Description desc) {
         def tmpFile = File.createTempFile("upload.", ".tmp")
-        tmpFile.renameTo(fileName)
+        tmpFile.renameTo(new File(classpathFile).name)
         tmpFile.deleteOnExit()
-        tmpFile << Thread.currentThread().getContextClassLoader().getResourceAsStream("applications/${fileName}")
+        tmpFile << Thread.currentThread().getContextClassLoader().getResourceAsStream(classpathFile)
         session {
-          exec 'mkdir -p /var/oracle/apps'
+          exec "mkdir -p $remoteDir"
           scp {
             from { localFile tmpFile }
-            into { remoteDir '/var/oracle/apps' }
+            into { remoteDir(remoteDir) }
           }
         }
         tmpFile.delete()
-        return stmt;
+        stmt
       }
     }
   }
