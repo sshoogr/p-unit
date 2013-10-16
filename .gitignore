@@ -4,6 +4,9 @@
 *.jar
 *.war
 *.ear
-/bin
+
+# Build Files #
+bin
 .gradle
+.DS_Store
 build
