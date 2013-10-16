@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Puppet-unit by aestasit</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Puppet-unit</h1>
+        <p>A Groovy library based on JUnit and Groovy SSH DSL for verifying results of Puppet modules.</p>
+
+        <p class="view"><a href="https://github.com/aestasit/puppet-unit">View the Project on GitHub <small>aestasit/puppet-unit</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/aestasit/puppet-unit/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/aestasit/puppet-unit/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/aestasit/puppet-unit">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="puppet-unit" class="anchor" href="#puppet-unit"><span class="octicon octicon-link"></span></a>puppet-unit</h1>
+
+<h2>
+<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>A <strong>Groovy</strong> library (based on <strong>JUnit</strong> - <a href="https://github.com/junit-team/junit">https://github.com/junit-team/junit</a>, and <strong>Groovy SSH DSL</strong> - 
+<a href="https://github.com/aestasit/groovy-ssh-dsl">https://github.com/aestasit/groovy-ssh-dsl</a>) for creating integration tests of <strong>Puppet</strong> modules.</p>
+
+<p>The <strong>puppet-unit</strong> is designed to work with some virtualization or cloud solutions, which allow starting testable 
+server instances on-demand. <strong>Aestas/IT</strong> usually uses <strong>puppet-unit</strong> together with <strong>gramazon</strong> (<a href="https://github.com/aestasit/gramazon">https://github.com/aestasit/gramazon</a>) - 
+a <strong>Groovy</strong> library and <strong>Gradle</strong> plugin for working with <strong>Amazon EC2</strong> instances.  </p>
+
+<h2>
+<a name="quick-example" class="anchor" href="#quick-example"><span class="octicon octicon-link"></span></a>Quick example</h2>
+
+<p>The following code shows an integration test for simple <strong>JDBC</strong> driver installation module:</p>
+
+<pre><code>class JdbcInstallTest extends BasePuppetIntegrationTest {
+
+  @Test
+  def void verifyMySqlDriverIsDownloaded() {
+
+    apply("""
+      jdbc::install { 'mysql':
+        media_library_host =&gt; '$mediaLibraryHost' 
+      }
+    """)
+
+    assertTrue directoryExists("/opt/jdbc")
+    assertTrue fileExists("/opt/jdbc/mysql-connector-5.1.23-generic-noarch.jar")
+
+  }
+
+  @Test
+  def void verifyDerbyDriverIsDownloaded() {
+
+    apply("""
+      jdbc::install { 'derby':
+        media_library_host =&gt; '$mediaLibraryHost' 
+      }
+    """)
+
+    assertTrue directoryExists("/opt/jdbc")
+    assertTrue fileExists("/opt/jdbc/derby-driver-10.9.1.0-generic-noarch.jar")
+
+  }
+
+  @BeforeClass
+  def static void installTools() {
+    command('yum -y -q install tree')
+  }
+
+  @Before
+  def void cleanUp() {
+    println "Removing installation directories:"
+    command('rm -rf /opt/jdbc')
+  }
+
+  @After
+  def void debug() {
+    println "Checking directory content:"
+    command('tree -ad /opt/jdbc')
+  }
+
+}
+</code></pre>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/aestasit">aestasit</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
