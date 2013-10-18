@@ -24,7 +24,7 @@ targetCompatibility = '1.6'
 
 dependencies {
   compile localGroovy()
-  compile 'junit:junit:4.+'
+  compile 'junit:junit:4.11'
   compile 'ch.qos.logback:logback-classic:1.+'
   compile 'org.slf4j:slf4j-api:1.7.2'
   compile 'com.aestasit.ssh:groovy-ssh-dsl:0.8.1-SNAPSHOT'
