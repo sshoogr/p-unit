@@ -1,4 +1,7 @@
 
+group = 'com.aestasit.infrastructure.puppet'
+version = '0.4-SNAPSHOT'
+
 buildscript {
   repositories { mavenCentral() }
   dependencies { classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' }
@@ -16,16 +19,13 @@ apply from: 'repos.gradle'
 apply from: 'sonar.gradle'
 apply from: 'docs.gradle'
 
-group = 'com.aestasit.puppet'
-version = '0.4-SNAPSHOT'
-
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
 dependencies {
   compile localGroovy()
   compile 'junit:junit:4.11'
-  compile 'ch.qos.logback:logback-classic:1.+'
+  compile 'ch.qos.logback:logback-classic:1.0.13'
   compile 'org.slf4j:slf4j-api:1.7.2'
   compile 'com.aestasit.ssh:groovy-ssh-dsl:0.8.1-SNAPSHOT'
   testCompile 'commons-io:commons-io:1.4'
