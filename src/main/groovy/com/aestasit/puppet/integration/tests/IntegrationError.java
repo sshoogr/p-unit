@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aestasit.puppet.integration.tests
+package com.aestasit.puppet.integration.tests;
 
 /**
  * Special exception for indicating Puppet errors.
@@ -24,21 +24,21 @@ package com.aestasit.puppet.integration.tests
  */
 class IntegrationError extends RuntimeException {
 
-  private static final long serialVersionUID = 1L
+  private static final long serialVersionUID = 1L;
 
   IntegrationError() {
-    super()
+    super();
   }
 
   IntegrationError(String message, Throwable cause) {
-    super(message, cause)
+    super(message, cause);
   }
 
   IntegrationError(String message) {
-    super(message)
+    super(message);
   }
 
   IntegrationError(Throwable cause) {
-    super(cause)
+    super(cause);
   }
 }
