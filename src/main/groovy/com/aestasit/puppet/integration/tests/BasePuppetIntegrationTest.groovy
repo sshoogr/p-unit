@@ -200,7 +200,7 @@ class BasePuppetIntegrationTest {
     return command("rpm -qa | grep $pkg") == 0
   }
 
-  def static TestRule commandRule(final String comm){
+  def static TestRule commandRule(final String comm) {
     return new TestRule() {
       public Statement apply(Statement stmt, Description desc) {
         BasePuppetIntegrationTest.command(comm)
