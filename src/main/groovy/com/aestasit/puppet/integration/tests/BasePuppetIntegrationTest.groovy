@@ -35,37 +35,43 @@ import com.aestasit.ssh.dsl.CommandOutput
 import com.aestasit.ssh.dsl.SshDslEngine
 import com.aestasit.ssh.log.SysOutLogger
 
+/**
+ * Base Puppet integration test case. 
+ * 
+ * @author Andrey Adamovich
+ *
+ */
 class BasePuppetIntegrationTest {
 
-  def static Random rng = new Random()
+  static Random rng = new Random()
 
-  def static String host
-  def static String keyFile
-  def static String user
-  def static String modulePath
+  static String host
+  static String keyFile
+  static String user
+  static String modulePath
 
-  def static SshDslEngine ssh
-  def static SshOptions sshOptions
+  static SshDslEngine ssh
+  static SshOptions sshOptions
 
   @BeforeClass
-  def static void setUp() {
+  static void setUp() {
     readSystemProperties()
     setSslContext()
     createSshEngine()
   }
 
   @AfterClass
-  def static void tearDown() {
+  static void tearDown() {
   }
 
-  def static void readSystemProperties() {
+  static void readSystemProperties() {
     host = System.getProperty("puppet.integration.tests.host")
     user  = System.getProperty("puppet.integration.tests.user") ?: 'root'
     keyFile  = System.getProperty("puppet.integration.tests.keyFile")
     modulePath  = System.getProperty("puppet.integration.tests.modulePath") ?: '/root/nc_puppet_modules/imported-modules:/root/nc_puppet_modules/custom-modules'
   }
 
-  def static void createSshEngine() {
+  static void createSshEngine() {
     sshOptions = new SshOptions()
     sshOptions.with {
       logger = new SysOutLogger()
@@ -80,7 +86,7 @@ class BasePuppetIntegrationTest {
     ssh = new SshDslEngine(sshOptions)
   }
 
-  def static void setSslContext() {
+  static void setSslContext() {
 
     def nullTrustManager = [
       checkClientTrusted: { chain, authType ->  },
@@ -93,8 +99,7 @@ class BasePuppetIntegrationTest {
     ]
 
     SSLContext sc = SSLContext.getInstance("SSL")
-    sc.init(null, [
-      nullTrustManager as X509TrustManager] as TrustManager[], null)
+    sc.init(null, [ nullTrustManager as X509TrustManager ] as TrustManager[], null)
     HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory())
     HttpsURLConnection.setDefaultHostnameVerifier(nullHostnameVerifier as HostnameVerifier)
   }
@@ -103,42 +108,46 @@ class BasePuppetIntegrationTest {
    * Utility methods.
    */
 
-  def static void download(address, downloadTo) {
+  static void download(address, downloadTo) {
     def file = new FileOutputStream(downloadTo + "/" + address.tokenize("/")[-1])
     def out = new BufferedOutputStream(file)
     out << new URL(address).openStream()
     out.close()
   }
 
-  def static void session(Closure cl) {
+  static void session(Closure cl) {
     ssh.remoteSession(cl)
   }
 
-  def static String fileText(String filePath) {
+  static String fileText(String filePath) {
     String content = null
     session {
       content = remoteFile(filePath).text
     }
-    return content
+    content
   }
 
-  def static Integer command(String command) {
+  static Integer command(String command) {
     CommandOutput result = null
     session {
       result = exec(command: command, failOnError: false)
     }
-    return result?.exitStatus
+    result?.exitStatus
   }
 
-  def static String commandOutput(String command, String defaultOutput = "") {
+  static String commandOutput(String command, String defaultOutput = "") {
     CommandOutput result = null
     session {
       result = exec(command: command, failOnError: false)
     }
-    return result?.output?.toString().trim() ?: defaultOutput
+    result?.output?.toString().trim() ?: defaultOutput
   }
 
-  def static String apply(String content, Integer repeat = 1) {
+  static protected boolean check(String command, int exitCode = 0) {
+    session.exec(command: command, showCommand: false, showOutput: false, failOnError: false).exitStatus == exitCode
+  }
+
+  static String apply(String content, Integer repeat = 1) {
     String applyOutput = ""
     session {
 
@@ -167,60 +176,60 @@ class BasePuppetIntegrationTest {
     }
     return applyOutput
   }
-
-  def static boolean fileExists(String path) {
-    return command("test -f $path") == 0
+  
+  static boolean fileExists(String path) {
+    command("test -f $path") == 0
   }
 
-  def static boolean directoryExists(String path) {
-    return command("test -d $path") == 0
+  static boolean directoryExists(String path) {
+    command("test -d $path") == 0
   }
 
-  def static Integer numberOfFiles(String path) {
-    return commandOutput("find ${path} 2>/dev/null | wc -l", "-1").toInteger()
+  static Integer numberOfFiles(String path) {
+    commandOutput("find ${path} 2>/dev/null | wc -l", "-1").toInteger()
   }
 
-  def static int permissions(String path) {
-    return commandOutput("stat -c %a $path", "0").toInteger()
+  static Integer permissions(String path) {
+    commandOutput("stat -c %a $path", "0").toInteger()
   }
 
-  def static String fact(String fact) {
-    return commandOutput("facter $fact", "")
+  static String fact(String fact) {
+    commandOutput("facter $fact", "")
   }
 
-  def static String[] pgrep(String pattern) {
-    return commandOutput("pgrep -f $pattern", "-1").split('(?smi)$')
+  static String[] pgrep(String pattern) {
+    commandOutput("pgrep -f $pattern", "-1").split('(?smi)$')
   }
 
-  def static boolean userExists(String user) {
-    return command("id $user") == 0
+  static boolean userExists(String user) {
+    command("id $user") == 0
   }
 
-  def static boolean packageExists(String pkg) {
-    return command("rpm -qa | grep $pkg") == 0
+  static boolean packageExists(String pkg) {
+    command("rpm -qa | grep $pkg") == 0
   }
 
-  def static TestRule commandRule(final String comm) {
-    return new TestRule() {
-      public Statement apply(Statement stmt, Description desc) {
+  static TestRule commandRule(final String comm) {
+    new TestRule() {
+      Statement apply(Statement stmt, Description desc) {
         BasePuppetIntegrationTest.command(comm)
         stmt
       }
     }
   }
 
-  def static TestRule printRule(final String message) {
-    return new TestRule() {
-      public Statement apply(Statement stmt, Description desc) {
+  static TestRule printRule(final String message) {
+    new TestRule() {
+      Statement apply(Statement stmt, Description desc) {
         println(message)
         stmt
       }
     }
   }
 
-  def static uploadRule(final String classpathFile, String remoteDir = '/tmp') {
-    return new TestRule() {
-      public Statement apply(Statement stmt, Description desc) {
+  static TestRule uploadRule(final String classpathFile, String remoteDir = '/tmp') {
+    new TestRule() {
+      Statement apply(Statement stmt, Description desc) {
         def tmpFile = File.createTempFile("upload.", ".tmp")
         tmpFile.renameTo(new File(classpathFile).name)
         tmpFile.deleteOnExit()
