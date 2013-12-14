@@ -1,6 +1,6 @@
 
 group = 'com.aestasit.infrastructure.puppet'
-version = '0.5.4-SNAPSHOT'
+version = '0.5.4'
 
 buildscript {
   repositories { mavenCentral() }
