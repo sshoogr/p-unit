@@ -22,23 +22,23 @@ package com.aestasit.puppet.integration.tests;
  * @author Aestas/IT
  *
  */
-class IntegrationError extends RuntimeException {
+public class IntegrationError extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
-  IntegrationError() {
+  public IntegrationError() {
     super();
   }
 
-  IntegrationError(String message, Throwable cause) {
+  public IntegrationError(String message, Throwable cause) {
     super(message, cause);
   }
 
-  IntegrationError(String message) {
+  public IntegrationError(String message) {
     super(message);
   }
 
-  IntegrationError(Throwable cause) {
+  public IntegrationError(Throwable cause) {
     super(cause);
   }
 }
