@@ -77,7 +77,7 @@ class BasePuppetIntegrationTest {
       logger = new SysOutLogger()
       defaultHost = host
       defaultUser = user
-      defaultKeyFile = new File(keyFile)
+      defaultKeyFile = keyFile ? new File(keyFile) : null
       reuseConnection = true
       trustUnknownHosts = true
       execOptions.with { showOutput = true }
