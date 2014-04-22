@@ -63,6 +63,3 @@ The following code shows an integration test for simple **JDBC** driver installa
     }
 
 
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/aestasit/puppet-unit/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
