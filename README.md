@@ -1,12 +1,12 @@
-# puppet-unit 
+# p-unit 
 
 ## Overview
 
 A **Groovy** library (based on **JUnit** - https://github.com/junit-team/junit, and **Groovy SSH DSL** - 
-https://github.com/aestasit/groovy-ssh-dsl) for creating integration tests of **Puppet** modules.
+https://github.com/aestasit/groovy-ssh-dsl) for creating integration tests of provisioning results of **Puppet** modules, **Chef** cookbook, **Ansible** playbooks and other.
 
-The **puppet-unit** is designed to work with some virtualization or cloud solutions, which allow starting testable 
-server instances on-demand. **Aestas/IT** usually uses **puppet-unit** together with **gramazon** (https://github.com/aestasit/gramazon) - 
+The **p-unit** is designed to work with some virtualization or cloud solutions, which allow starting testable 
+server instances on-demand. **Aestas/IT** usually uses **p-unit** together with **gramazon** (https://github.com/aestasit/gramazon) - 
 a **Groovy** library and **Gradle** plugin for working with **Amazon EC2** instances.  
 
 ## Quick example
