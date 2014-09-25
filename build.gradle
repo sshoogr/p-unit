@@ -23,10 +23,11 @@ sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
 dependencies {
-  compile localGroovy()
+  compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+  compile "org.slf4j:slf4j-api:${slf4jVersion}"
+  compile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
+  compile "ch.qos.logback:logback-classic:${logbackVersion}"
   compile 'junit:junit:4.11'
-  compile 'ch.qos.logback:logback-classic:1.1.2'
-  compile 'org.slf4j:slf4j-api:1.7.2'
   compile 'com.aestasit.infrastructure.sshoogr:sshoogr:0.9.4'
   testCompile 'commons-io:commons-io:1.4'
 }
