@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2014 Aestas/IT
+ * Copyright (C) 2011-2020 Aestas/IT
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.aestasit.puppet.integration.tests
+
+import com.aestasit.infrastructure.ssh.SshOptions
+import com.aestasit.infrastructure.ssh.dsl.CommandOutput
+import com.aestasit.infrastructure.ssh.dsl.SshDslEngine
+import com.aestasit.infrastructure.ssh.log.SysOutEventLogger
 
 import static org.junit.Assert.*
 
@@ -29,11 +33,6 @@ import org.junit.BeforeClass
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-
-import com.aestasit.ssh.SshOptions
-import com.aestasit.ssh.dsl.CommandOutput
-import com.aestasit.ssh.dsl.SshDslEngine
-import com.aestasit.ssh.log.SysOutLogger
 
 /**
  * Base Puppet integration test case. 
@@ -74,7 +73,7 @@ class BasePuppetIntegrationTest {
   static void createSshEngine() {
     sshOptions = new SshOptions()
     sshOptions.with {
-      logger = new SysOutLogger()
+      logger = new SysOutEventLogger()
       defaultHost = host
       defaultUser = user
       defaultKeyFile = keyFile ? new File(keyFile) : null
@@ -140,11 +139,15 @@ class BasePuppetIntegrationTest {
     session {
       result = exec(command: command, failOnError: false)
     }
-    result?.output?.toString().trim() ?: defaultOutput
+    result?.output?.toString()?.trim() ?: defaultOutput
   }
 
   static protected boolean check(String command, int exitCode = 0) {
-    session.exec(command: command, showCommand: false, showOutput: false, failOnError: false).exitStatus == exitCode
+    CommandOutput result = null
+    session {
+      result = exec(command: command, showCommand: false, showOutput: false, failOnError: false)
+    }
+    result?.exitStatus == exitCode
   }
 
   static String apply(String content, Integer repeat = 1) {

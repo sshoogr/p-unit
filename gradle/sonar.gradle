@@ -13,31 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aestasit.puppet.integration.tests;
 
-/**
- * Special exception for indicating Puppet errors.
- *
- * @author Aestas/IT
- *
- */
-public class IntegrationError extends RuntimeException {
-
-  private static final long serialVersionUID = 1L;
-
-  public IntegrationError() {
-    super();
-  }
-
-  public IntegrationError(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public IntegrationError(String message) {
-    super(message);
-  }
-
-  public IntegrationError(Throwable cause) {
-    super(cause);
+sonarqube {
+  properties {
+    property 'sonar.sources',           'src/main/groovy'
+    property 'sonar.projectName',       "${project.group}:${project.name}"
+    property 'sonar.projectKey',        "${project.group}:${project.name}"
+    property 'sonar.jacoco.reportPath', "${project.buildDir}/jacoco/test.exec"
   }
 }

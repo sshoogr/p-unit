@@ -1,43 +1,50 @@
+/*
+ * Copyright (C) 2011-2020 Aestas/IT
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-group = 'com.aestasit.infrastructure.puppet'
-version = '0.5.5-SNAPSHOT'
-
-buildscript {
-  repositories { mavenCentral() }
-  dependencies { classpath 'net.saliman:gradle-cobertura-plugin:2.2.4' }
-  dependencies { classpath 'org.ajoberstar:gradle-git:0.8.0' }
+plugins {
+  id 'java-library'
+  id 'groovy'
+  id 'idea'
+  id 'com.aestasit.gradle.plugins.sshoogr-parentpom'
+  id 'org.ajoberstar.git-publish'
+  id 'org.sonarqube'
 }
 
-apply plugin: 'groovy'
-apply plugin: 'maven'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: 'cobertura'
-apply plugin: 'github-pages'
+config {
+  info {
+    name          = 'Puppet Unit'
+    description   = 'A Groovy library based on JUnit and Groovy SSH DSL for verifying results of Puppet modules.'
+    inceptionYear = '2011'
+    tags          = ['ssh', 'puppet']
+  }
+}
 
-apply from: 'repos.gradle'
-apply from: 'sonar.gradle'
-apply from: 'docs.gradle'
-
-sourceCompatibility = '1.6'
-targetCompatibility = '1.6'
+apply from: 'gradle/sonar.gradle'
+apply from: 'gradle/docs.gradle'
 
 dependencies {
-  compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
-  compile "org.slf4j:slf4j-api:${slf4jVersion}"
-  compile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
-  compile "ch.qos.logback:logback-classic:${logbackVersion}"
-  compile 'junit:junit:4.11'
-  compile 'com.aestasit.infrastructure.sshoogr:sshoogr:0.9.4'
-  testCompile 'commons-io:commons-io:1.4'
+  api localGroovy()
+  api "org.slf4j:slf4j-api:${slf4jVersion}"
+  api "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
+  api "ch.qos.logback:logback-classic:${logbackVersion}"
+  api "junit:junit:${junitVersion}"
+  api "com.aestasit.infrastructure.sshoogr:sshoogr:${sshoogrVersion}"
+  testImplementation "commons-io:commons-io:${commonsIOVersion}"
 }
 
-configurations {
-  all*.exclude group: 'commons-logging'
-  all*.exclude group: 'log4j'
-  all*.exclude module: 'slf4j-simple'
-}
-
-task wrapper(type: Wrapper) {
-  gradleVersion = '2.1'
+configurations.all {
+  resolutionStrategy.force "org.slf4j:slf4j-api:${slf4jVersion}"
 }

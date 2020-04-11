@@ -13,31 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aestasit.puppet.integration.tests;
 
-/**
- * Special exception for indicating Puppet errors.
- *
- * @author Aestas/IT
- *
- */
-public class IntegrationError extends RuntimeException {
-
-  private static final long serialVersionUID = 1L;
-
-  public IntegrationError() {
-    super();
+afterEvaluate {
+  gitPublish {
+    repoUri = project.extensions.effectiveConfig.info.resolveScmLink()
+    contents {
+      from(groovydoc.outputs.files) {
+        into 'docs/groovydoc'
+      }
+    }
   }
-
-  public IntegrationError(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public IntegrationError(String message) {
-    super(message);
-  }
-
-  public IntegrationError(Throwable cause) {
-    super(cause);
-  }
+  gitPublishCommit.dependsOn(groovydoc)
 }

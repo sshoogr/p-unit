@@ -1,9 +1,13 @@
 # p-unit 
 
+![GitHub Workflow Status](https://github.com/sshoogr/p-unit/workflows/Build/badge.svg)
+![ASL2 Licensed](http://img.shields.io/badge/license-ASL2-blue.svg)
+![Latest Version](https://api.bintray.com/packages/sshoogr/sshoogr/p-unit/images/download.svg)
+
 ## Overview
 
-A **Groovy** library (based on **JUnit** - https://github.com/junit-team/junit, and **Groovy SSH DSL** - 
-https://github.com/aestasit/groovy-ssh-dsl) for creating integration tests of provisioning results of **Puppet** modules, **Chef** cookbook, **Ansible** playbooks and other.
+A **Groovy** library (based on **JUnit** - https://github.com/junit-team/junit, and **Sshoogr** - 
+https://github.com/sshoogr/sshoogr) for creating integration tests of provisioning results of **Puppet** modules, **Chef** cookbook, **Ansible** playbooks and other.
 
 The **p-unit** is designed to work with some virtualization or cloud solutions, which allow starting testable 
 server instances on-demand. **Aestas/IT** usually uses **p-unit** together with **gramazon** (https://github.com/aestasit/gramazon) - 
