@@ -15,12 +15,10 @@
  */
 
 plugins {
-  id 'java-library'
-  id 'groovy'
-  id 'idea'
-  id 'com.aestasit.gradle.plugins.sshoogr-parentpom'
-  id 'org.ajoberstar.git-publish'
-  id 'org.sonarqube'
+    id 'java-library'
+    id 'groovy'
+    id 'idea'
+    id 'org.ajoberstar.git-publish'
 }
 
 config {
@@ -32,19 +30,14 @@ config {
   }
 }
 
-apply from: 'gradle/sonar.gradle'
-apply from: 'gradle/docs.gradle'
 
 dependencies {
-  api localGroovy()
+  api "org.codehaus.groovy:groovy:${groovyVersion}"
   api "org.slf4j:slf4j-api:${slf4jVersion}"
   api "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
   api "ch.qos.logback:logback-classic:${logbackVersion}"
   api "junit:junit:${junitVersion}"
   api "com.aestasit.infrastructure.sshoogr:sshoogr:${sshoogrVersion}"
+  
   testImplementation "commons-io:commons-io:${commonsIOVersion}"
-}
-
-configurations.all {
-  resolutionStrategy.force "org.slf4j:slf4j-api:${slf4jVersion}"
 }
