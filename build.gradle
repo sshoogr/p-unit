@@ -41,3 +41,15 @@ dependencies {
   
   testImplementation "commons-io:commons-io:${commonsIOVersion}"
 }
+
+gitPublish {
+    repoUri = rootProject.extensions.findByName('config').info.links.scm
+    branch = 'gh-pages'
+    contents {
+        from(groovydoc.outputs.files) {
+            into 'docs/groovydoc'
+        }
+    }
+}
+
+gitPublishCommit.dependsOn(groovydoc)
